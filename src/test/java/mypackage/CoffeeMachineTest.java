@@ -2,10 +2,6 @@ package mypackage;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CoffeeMachineTest {
@@ -13,14 +9,7 @@ class CoffeeMachineTest {
     @Test
     void quitting() {
 
-        byte[] bytes = "q\n".getBytes();
-        System.setIn(new ByteArrayInputStream(bytes));
-
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(output));
-
-
-        CoffeeMachine.main(new String[]{});
+        var output = CoffeeMachineRunner.runCoffeeMachine("q\n");
 
         assertEquals("Inventory:\n" +
                 "Cocoa,10\n" +
@@ -41,7 +30,7 @@ class CoffeeMachineTest {
                 "5,Coffee,$2,75,true\n" +
                 "6,Decaf Coffee,$2,75,true\n" +
                 "\n" +
-                "Your selection: ", output.toString());
+                "Your selection: ", output);
 
     }
 
