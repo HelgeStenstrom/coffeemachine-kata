@@ -7,8 +7,8 @@ public class Ingredient implements Comparable<Ingredient> {
     private final double cost;
     private int stock;
 
-    public Ingredient(String name, double cost) {
-        this.name = name;
+    public Ingredient(Ingred name, double cost) {
+        this.name = name.getIngredientName();
         this.cost = cost;
         this.stock = 10;
     }
@@ -46,4 +46,25 @@ public class Ingredient implements Comparable<Ingredient> {
         return stock;
     }
 
+    public enum Ingred {
+        COFFEE("Coffee"),
+        SUGAR("Sugar"),
+        CREAM("Cream"),
+        DECAF_COFFEE("Decaf Coffee"),
+        ESPRESSO("Espresso"),
+        STEAMED_MILK("Steamed Milk"),
+        COCOA("Cocoa"),
+        WHIPPED_CREAM("Whipped Cream"),
+        FOAMED_MILK("Foamed Milk");
+
+        public String getIngredientName() {
+            return ingredientName;
+        }
+
+        private final String ingredientName;
+
+        Ingred(String ingredientName) {
+            this.ingredientName = ingredientName;
+        }
+    }
 }

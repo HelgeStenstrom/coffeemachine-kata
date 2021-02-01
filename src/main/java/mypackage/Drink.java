@@ -10,7 +10,7 @@ public class Drink implements Comparable<Drink> {
     private double totalCost = 0;
     private boolean makeable = false;
 
-    public Drink(String name, String[] recipe) {
+    public Drink(String name, Ingredient.Ingred[] recipe) {
         this.name = name;
         setRecipe(recipe);
     }
@@ -32,8 +32,9 @@ public class Drink implements Comparable<Drink> {
         return Objects.hash(name);
     }
 
-    public void setRecipe(String[] recipe) {
-        for (String s : recipe) {
+    public void setRecipe(Ingredient.Ingred[] recipe) {
+        for (Ingredient.Ingred ingr : recipe) {
+            String s = ingr.getIngredientName();
             if (this.recipe.containsKey(s)) {
                 this.recipe.put(s, this.recipe.get(s) + 1);//increment if multiple units
             } else {

@@ -5,15 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static mypackage.Ingredient.Ingred.*;
+
 public class Model {
     final List<Drink> drinkList = new ArrayList<>();
     final List<Ingredient> ingredientList = new ArrayList<>();
-    private static final String COFFEE = "Coffee";
-    private static final String SUGAR = "Sugar";
-    private static final String CREAM = "Cream";
-    private static final String DECAF_COFFEE = "Decaf Coffee";
-    private static final String ESPRESSO = "Espresso";
-    private static final String STEAMED_MILK = "Steamed Milk";
 
     public Model() {
         addAllIngredients();
@@ -23,12 +19,12 @@ public class Model {
     }
 
     public void addAllDrinks() {
-        addDrink("Coffee", new String[]{COFFEE, COFFEE, COFFEE, SUGAR, CREAM});
-        addDrink("Decaf Coffee", new String[]{DECAF_COFFEE, DECAF_COFFEE, DECAF_COFFEE, SUGAR, CREAM});
-        addDrink("Caffe Latte", new String[]{ESPRESSO, ESPRESSO, STEAMED_MILK});
-        addDrink("Caffe Americano", new String[]{ESPRESSO, ESPRESSO, ESPRESSO});
-        addDrink("Caffe Mocha", new String[]{ESPRESSO, "Cocoa", STEAMED_MILK, "Whipped Cream"});
-        addDrink("Cappuccino", new String[]{ESPRESSO, ESPRESSO, STEAMED_MILK, "Foamed Milk"});
+        addDrink("Coffee", new Ingredient.Ingred[]{COFFEE, COFFEE, COFFEE, SUGAR, CREAM});
+        addDrink("Decaf Coffee", new Ingredient.Ingred[]{DECAF_COFFEE, DECAF_COFFEE, DECAF_COFFEE, SUGAR, CREAM});
+        addDrink("Caffe Latte", new Ingredient.Ingred[]{ESPRESSO, ESPRESSO, STEAMED_MILK});
+        addDrink("Caffe Americano", new Ingredient.Ingred[]{ESPRESSO, ESPRESSO, ESPRESSO});
+        addDrink("Caffe Mocha", new Ingredient.Ingred[]{ESPRESSO, COCOA, STEAMED_MILK, WHIPPED_CREAM});
+        addDrink("Cappuccino", new Ingredient.Ingred[]{ESPRESSO, ESPRESSO, STEAMED_MILK, FOAMED_MILK});
 
         Collections.sort(drinkList);
     }
@@ -39,16 +35,17 @@ public class Model {
         addIngredient(new Ingredient(SUGAR, 0.25));
         addIngredient(new Ingredient(CREAM, 0.25));
         addIngredient(new Ingredient(STEAMED_MILK, 0.35));
-        addIngredient(new Ingredient("Foamed Milk", 0.35));
+        addIngredient(new Ingredient(FOAMED_MILK, 0.35));
         addIngredient(new Ingredient(ESPRESSO, 1.10));
-        addIngredient(new Ingredient("Cocoa", 0.90));
-        addIngredient(new Ingredient("Whipped Cream", 1.00));
+        addIngredient(new Ingredient(COCOA, 0.90));
+        addIngredient(new Ingredient(WHIPPED_CREAM, 1.00));
 
         Collections.sort(ingredientList);
     }
 
-    public void addDrink(String name, String[] recipe) {
-        drinkList.add(new Drink(name, recipe));
+    public void addDrink(String name, Ingredient.Ingred[] recipe) {
+        Drink drink = new Drink(name, recipe);
+        drinkList.add(drink);
     }
 
     public void addIngredient(Ingredient ingredient) {
