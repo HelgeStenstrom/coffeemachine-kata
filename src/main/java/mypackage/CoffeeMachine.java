@@ -33,7 +33,7 @@ public class CoffeeMachine {
                 if (input.equals("")) {
                     continue;
                 } else if (input.equals("q")) {
-                    System.exit(0);
+                    break;
                 } else if (input.equals("r")) {
                     restockIngredients();
                     updateMakeable();
@@ -46,6 +46,7 @@ public class CoffeeMachine {
                 System.out.print("Invalid selection: " + input + ". Try again: "); //illegal input
             }
         }
+        //System.exit(0);
     }
 
     public static void display() {
