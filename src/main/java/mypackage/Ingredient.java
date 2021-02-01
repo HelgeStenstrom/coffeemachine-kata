@@ -1,3 +1,5 @@
+package mypackage;
+
 public class Ingredient implements Comparable<Ingredient> {
     private String name = "";
     private double cost = 0.00;

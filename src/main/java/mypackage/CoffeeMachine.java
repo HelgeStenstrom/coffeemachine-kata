@@ -1,3 +1,5 @@
+package mypackage;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,19 +10,26 @@ import java.util.Map;
 
 public class CoffeeMachine {
 
-    private static List<Drink> drinkList = new ArrayList<Drink>();
-    private static List<Ingredient> ingredientList = new ArrayList<Ingredient>();
+    private static List<Drink> drinkList = new ArrayList<>();
+    private static List<Ingredient> ingredientList = new ArrayList<>();
 
     public static void main(String[] args) {
+
+        // Model
         addAllIngredients();
         addAllDrinks();
         updateCosts();
         updateMakeable();
-        display();
-        startIO();
+
+        // View
+        CliView cliView = new CliView();
+        cliView.askForSelection(ingredientList, drinkList);
+
+        // Controller
+        control(cliView);
     }
 
-    public static void startIO() {
+    public static void control(CliView cliView) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String input = "";
 
@@ -33,33 +42,17 @@ public class CoffeeMachine {
                 } else if (input.equals("q")) {
                     System.exit(0);
                 } else if (input.equals("r")) {
-                    restockIngredients();
+                    restockIngredients(cliView);
                     updateMakeable();
                 } else if (Integer.parseInt(input) > 0 && Integer.parseInt(input) <= drinkList.size()) { //dynamic drink menu selection
-                    makeDrink(drinkList.get(Integer.parseInt(input) - 1));
+                    makeDrink(drinkList.get(Integer.parseInt(input) - 1), cliView);
                 } else {
                     throw new IOException(); //legal, but invalid input
                 }
             } catch (Exception e) {
-                System.out.print("Invalid selection: " + input + ". Try again: "); //illegal input
+                cliView.showInvalidSelection(input); //illegal input
             }
         }
-    }
-
-    public static void display() {
-        System.out.println("Inventory:");
-        for (Ingredient i : ingredientList) {
-            System.out.println(i.getName() + "," + i.getStock());
-        }
-
-        System.out.println("\nMenu:");
-        int count = 1;
-        for (Drink d : drinkList) {
-            System.out.printf("%d,%s,$%.2f," + d.getMakeable() + "\n", count, d.getName(), d.getCost());
-            count++;
-        }
-
-        System.out.print("\nYour selection: ");
     }
 
     public static void updateMakeable() {
@@ -88,27 +81,27 @@ public class CoffeeMachine {
         }
     }
 
-    public static void makeDrink(Drink drink) {
+    public static void makeDrink(Drink drink, CliView cliView) {
         if (drink.getMakeable()) {
-            System.out.println("Dispensing: " + drink.getName() + "\n");
+            cliView.showDispensingDrink(drink);
             for (Ingredient i : ingredientList) {
                 if (drink.getRecipe().containsKey(i.getName())) {
                     i.setStock(i.getStock() - drink.getRecipe().get(i.getName()));
                 }
             }
         } else {
-            System.out.println("Out of stock: " + drink.getName() + "\n");
+            cliView.showOutOfStock(drink);
         }
         updateMakeable();
-        display();
+        cliView.askForSelection(ingredientList, drinkList);
     }
 
-    public static void restockIngredients() {
+    public static void restockIngredients(CliView cliView) {
         for (Ingredient i : ingredientList) {
             i.setStock(10);
         }
         updateMakeable();
-        display();
+        cliView.askForSelection(ingredientList, drinkList);
     }
 
     public static void addIngredient(Ingredient ingredient) {
