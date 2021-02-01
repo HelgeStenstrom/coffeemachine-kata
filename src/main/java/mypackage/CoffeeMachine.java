@@ -37,7 +37,7 @@ public class CoffeeMachine {
         } catch (IOException | IllegalArgumentException e) {
             view.showInvalidSelection(input); //illegal input
         }
-        System.exit(0);
+        //System.exit(0);
     }
 
 }

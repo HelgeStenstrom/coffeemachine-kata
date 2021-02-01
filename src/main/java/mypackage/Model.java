@@ -23,8 +23,8 @@ public class Model {
     }
 
     public void addAllDrinks() {
-        addDrink("Coffee in a cup", new String[]{COFFEE, COFFEE, COFFEE, SUGAR, CREAM});
-        addDrink("Decaf Coffee drink", new String[]{DECAF_COFFEE, DECAF_COFFEE, DECAF_COFFEE, SUGAR, CREAM});
+        addDrink("Coffee", new String[]{COFFEE, COFFEE, COFFEE, SUGAR, CREAM});
+        addDrink("Decaf Coffee", new String[]{DECAF_COFFEE, DECAF_COFFEE, DECAF_COFFEE, SUGAR, CREAM});
         addDrink("Caffe Latte", new String[]{ESPRESSO, ESPRESSO, STEAMED_MILK});
         addDrink("Caffe Americano", new String[]{ESPRESSO, ESPRESSO, ESPRESSO});
         addDrink("Caffe Mocha", new String[]{ESPRESSO, "Cocoa", STEAMED_MILK, "Whipped Cream"});
