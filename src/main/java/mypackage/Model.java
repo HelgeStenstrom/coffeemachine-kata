@@ -15,7 +15,7 @@ public class Model {
         addAllIngredients();
         addAllDrinks();
         updateCosts();
-        updateMakeable();
+        updateMakeable(ingredientList);
     }
 
     public void addAllDrinks() {
@@ -65,42 +65,33 @@ public class Model {
         }
     }
 
-    public void updateMakeable() {
-        for (Drink d : drinkList) {
-            Map<String, Integer> currRecipe = d.getRecipe();
-            for (Ingredient i : ingredientList) {
-                if (currRecipe.containsKey(i.getName()) && i.getStock() < currRecipe.get(i.getName())) {
-                    d.setMakeable(false);
-                    break;
-                }
-                d.setMakeable(true);
-            }
+    public void updateMakeable(List<Ingredient> ingredientList) {
+        for (Drink drink : drinkList) {
+            drink.updateMakeable(ingredientList);
         }
     }
 
-    void makeDrink(int drinkId, CliView cliView) {
+    public void makeDrink(int drinkId, CliView view) {
+        Drink drink = dringById(drinkId);
+        drink.makeTheDrink(view, ingredientList, this);
+    }
+
+    private Drink dringById(int drinkId) {
+        assertDrinkExists(drinkId);
+        return drinkList.get(drinkId - 1);
+    }
+
+    private void assertDrinkExists(int drinkId) {
         if (drinkId <= 0 || drinkId > drinkList.size()) {
             throw new IllegalArgumentException();
         }
-        Drink drink = drinkList.get(drinkId - 1);
-        if (drink.getMakeable()) {
-            cliView.showDispensingDrink(drink);
-            for (Ingredient i : ingredientList) {
-                if (drink.getRecipe().containsKey(i.getName())) {
-                    i.setStock(i.getStock() - drink.getRecipe().get(i.getName()));
-                }
-            }
-        } else {
-            cliView.showOutOfStock(drink);
-        }
-        updateMakeable();
     }
 
     public void restockIngredients() {
         for (Ingredient i : ingredientList) {
             i.setStock(10);
         }
-        updateMakeable();
+        updateMakeable(ingredientList);
     }
 
 }

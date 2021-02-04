@@ -1,6 +1,7 @@
 package mypackage;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -67,4 +68,39 @@ public class Drink implements Comparable<Drink> {
         return makeable;
     }
 
+    void makeTheDrink(CliView view, List<Ingredient> ingredientList, Model model) {
+        if (makeable) {
+            view.showDispensingDrink(this);
+            for (Ingredient ingredient : ingredientList) {
+                consume(ingredient);
+            }
+        } else {
+            view.showOutOfStock(this);
+        }
+        model.updateMakeable(model.ingredientList);
+    }
+
+    private void consume(Ingredient ingredient) {
+        if (isNeeded(ingredient)) {
+            ingredient.consume(neededAmount(ingredient));
+        }
+    }
+
+    private boolean isNeeded(Ingredient ingredient) {
+        return recipe.containsKey(ingredient.getName());
+    }
+
+    private Integer neededAmount(Ingredient ingredient) {
+        return recipe.get(ingredient.getName());
+    }
+
+    void updateMakeable(List<Ingredient> ingredientList) {
+        for (Ingredient ingredient : ingredientList) {
+            if (isNeeded(ingredient) && ingredient.getStock() < neededAmount(ingredient)) {
+                setMakeable(false);
+                break;
+            }
+            setMakeable(true);
+        }
+    }
 }

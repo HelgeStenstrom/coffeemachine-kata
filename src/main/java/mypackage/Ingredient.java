@@ -46,6 +46,10 @@ public class Ingredient implements Comparable<Ingredient> {
         return stock;
     }
 
+    void consume(Integer neededAmount) {
+        this.stock = stock - neededAmount;
+    }
+
     public enum Ingred {
         COFFEE("Coffee"),
         SUGAR("Sugar"),
