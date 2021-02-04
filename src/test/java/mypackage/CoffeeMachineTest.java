@@ -26,12 +26,24 @@ class CoffeeMachineTest {
         System.setIn(originalIn);
     }
 
-    private String getOriginalMenu() {
+    private String originalMenu() {
         return "Menu:\n" +
                 "1,Caffe Americano,$3,30,true\n" +
                 "2,Caffe Latte,$2,55,true\n" +
                 "3,Caffe Mocha,$3,35,true\n" +
                 "4,Cappuccino,$2,90,true\n" +
+                "5,Coffee,$2,75,true\n" +
+                "6,Decaf Coffee,$2,75,true\n" +
+                "\n" +
+                "Your selection: ";
+    }
+
+    private String outOfStockMenu() {
+        return "Menu:\n" +
+                "1,Caffe Americano,$3,30,false\n" +
+                "2,Caffe Latte,$2,55,false\n" +
+                "3,Caffe Mocha,$3,35,true\n" +
+                "4,Cappuccino,$2,90,false\n" +
                 "5,Coffee,$2,75,true\n" +
                 "6,Decaf Coffee,$2,75,true\n" +
                 "\n" +
@@ -52,13 +64,13 @@ class CoffeeMachineTest {
                 "\n";
     }
 
-    private String getAfterSel1Inventory() {
-        return dispensingAmericano() + "Inventory:\n" +
+    private String invAfterSale(String espressos) {
+        return  "Inventory:\n" +
                 "Cocoa,10\n" +
                 "Coffee,10\n" +
                 "Cream,10\n" +
                 "Decaf Coffee,10\n" +
-                "Espresso,7\n" +
+                "Espresso," + espressos + "\n" +
                 "Foamed Milk,10\n" +
                 "Steamed Milk,10\n" +
                 "Sugar,10\n" +
@@ -76,7 +88,7 @@ class CoffeeMachineTest {
 
         var output = CoffeeMachineRunner.runCoffeeMachine("q\n");
 
-        assertEquals(getOriginalInventory() + getOriginalMenu(), output);
+        assertEquals(getOriginalInventory() + originalMenu(), output);
 
     }
 
@@ -86,7 +98,7 @@ class CoffeeMachineTest {
         var output = CoffeeMachineRunner.runCoffeeMachine("r\nq\n");
 
         String originalInventory = getOriginalInventory();
-        String originalMenu = getOriginalMenu();
+        String originalMenu = originalMenu();
 
         assertEquals(originalInventory + originalMenu + originalInventory + originalMenu,
                 output);
@@ -98,10 +110,32 @@ class CoffeeMachineTest {
         var output = CoffeeMachineRunner.runCoffeeMachine("1\nq\n");
 
         String originalInventory = getOriginalInventory();
-        String originalMenu = getOriginalMenu();
+        String originalMenu = originalMenu();
 
-        assertEquals(originalInventory + originalMenu + getAfterSel1Inventory() + originalMenu,
+        assertEquals(originalInventory + originalMenu + dispensingAmericano() + invAfterSale("7") + originalMenu,
                 output);
+    }
+
+    @Test
+    void americanoUntilOutOfStockAndQuit() {
+
+        var output = CoffeeMachineRunner.runCoffeeMachine("1\n1\n1\n1\nq\n");
+
+        String originalInventory = getOriginalInventory();
+        String originalMenu = originalMenu();
+
+        assertEquals(originalInventory + originalMenu
+                        + dispensingAmericano() + invAfterSale("7") + originalMenu
+                        + dispensingAmericano() + invAfterSale("4") + originalMenu
+                        + dispensingAmericano() + invAfterSale("1") + outOfStockMenu()
+                        + failedSale() + invAfterSale("1") + outOfStockMenu()
+                ,
+                output);
+    }
+
+    private String failedSale() {
+        return "Out of stock: Caffe Americano\n" +
+                "\n";
     }
 
 }
