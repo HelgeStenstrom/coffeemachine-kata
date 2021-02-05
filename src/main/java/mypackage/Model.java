@@ -15,7 +15,6 @@ public class Model {
         addAllIngredients();
         addAllDrinks();
         updateCosts();
-        updateMakeable(ingredientList);
     }
 
     public void addAllDrinks() {
@@ -65,18 +64,11 @@ public class Model {
         }
     }
 
-    public void updateMakeable(List<Ingredient> ingredientList) {
-        for (Drink drink : drinkList) {
-            drink.updateMakeable(ingredientList);
-        }
-    }
-
     public void makeDrink(int drinkId, CliView view) {
-        Drink drink = dringById(drinkId);
-        drink.makeTheDrink(view, ingredientList, this);
+        drinkById(drinkId).make(ingredientList, view);
     }
 
-    private Drink dringById(int drinkId) {
+    private Drink drinkById(int drinkId) {
         assertDrinkExists(drinkId);
         return drinkList.get(drinkId - 1);
     }
@@ -91,7 +83,7 @@ public class Model {
         for (Ingredient i : ingredientList) {
             i.setStock(10);
         }
-        updateMakeable(ingredientList);
+
     }
 
 }

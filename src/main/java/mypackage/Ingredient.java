@@ -50,6 +50,10 @@ public class Ingredient implements Comparable<Ingredient> {
         this.stock = stock - neededAmount;
     }
 
+    boolean hasAmount(Integer neededAmount) {
+        return stock >= neededAmount;
+    }
+
     public enum Ingred {
         COFFEE("Coffee"),
         SUGAR("Sugar"),

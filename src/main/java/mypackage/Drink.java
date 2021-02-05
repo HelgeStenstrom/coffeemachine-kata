@@ -9,7 +9,6 @@ public class Drink implements Comparable<Drink> {
     private final Map<String, Integer> recipe = new HashMap<>();//map ingredients to units per
     private final String name;
     private double totalCost = 0;
-    private boolean makeable = false;
 
     public Drink(String name, Ingredient.Ingred[] recipe) {
         this.name = name;
@@ -48,10 +47,6 @@ public class Drink implements Comparable<Drink> {
         this.totalCost = totalCost;
     }
 
-    public void setMakeable(boolean makeable) {
-        this.makeable = makeable;
-    }
-
     public Map<String, Integer> getRecipe() {
         return recipe;
     }
@@ -64,12 +59,8 @@ public class Drink implements Comparable<Drink> {
         return name;
     }
 
-    public boolean getMakeable() {
-        return makeable;
-    }
-
-    void makeTheDrink(CliView view, List<Ingredient> ingredientList, Model model) {
-        if (makeable) {
+    void make(List<Ingredient> ingredientList, CliView view) {
+        if (isMakeable(ingredientList)) {
             view.showDispensingDrink(this);
             for (Ingredient ingredient : ingredientList) {
                 consume(ingredient);
@@ -77,7 +68,7 @@ public class Drink implements Comparable<Drink> {
         } else {
             view.showOutOfStock(this);
         }
-        model.updateMakeable(model.ingredientList);
+
     }
 
     private void consume(Ingredient ingredient) {
@@ -94,13 +85,14 @@ public class Drink implements Comparable<Drink> {
         return recipe.get(ingredient.getName());
     }
 
-    void updateMakeable(List<Ingredient> ingredientList) {
-        for (Ingredient ingredient : ingredientList) {
-            if (isNeeded(ingredient) && ingredient.getStock() < neededAmount(ingredient)) {
-                setMakeable(false);
-                break;
-            }
-            setMakeable(true);
-        }
+    public boolean isMakeable(List<Ingredient> ingredientList) {
+        return ingredientList.stream()
+                .filter(this::isNeeded)
+                .allMatch(this::available);
     }
+
+    private boolean available(Ingredient ingredient) {
+        return ingredient.hasAmount(neededAmount(ingredient));
+    }
+
 }
