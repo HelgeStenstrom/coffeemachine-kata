@@ -1,14 +1,13 @@
 package mypackage;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Drink implements Comparable<Drink> {
-    private final Map<String, Integer> recipe;//map ingredients to units per
+    private final Map<Material, Integer> recipe;//map ingredients to units per
     private final String name;
 
     public Drink(String name, Material[] recipe) {
@@ -20,21 +19,12 @@ public class Drink implements Comparable<Drink> {
         return name;
     }
 
-    private Map<String, Integer> asMap(Material[] recipe) {
-        // Time: 14:38
-        Map<Material, Long> collect = Arrays.stream(recipe).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    private Map<Material, Integer> asMap(Material[] recipe) {
 
-
-        Map<String, Integer> recipeMap = new HashMap<>();
-        for (Material ingredient : recipe) {
-            String ingredientName = ingredient.getIngredientName();
-            if (recipeMap.containsKey(ingredientName)) {
-                recipeMap.put(ingredientName, recipeMap.get(ingredientName) + 1);//increment if multiple units
-            } else {
-                recipeMap.put(ingredientName, 1);//insert first occurrence of ingredient
-            }
-        }
-        return recipeMap;
+        return Arrays.stream(recipe)
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.summingInt(e -> 1)));
     }
 
     @Override
@@ -51,7 +41,7 @@ public class Drink implements Comparable<Drink> {
     }
 
     public Integer neededAmount(Ingredient ingredient) {
-        return recipe.getOrDefault(ingredient.getName(), 0);
+        return recipe.getOrDefault(ingredient.getMaterial(), 0);
 
     }
 

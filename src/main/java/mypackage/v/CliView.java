@@ -17,10 +17,11 @@ public class CliView {
         System.out.println("\nMenu:");
         int count = 1;
         for (Drink drink : drinkList) {
+            double cost = ingredients.cost(drink);
             System.out.printf("%d,%s,$%.2f,%s%n",
                     count,
                     drink.getName(),
-                    ingredients.cost(drink),
+                    cost,
                     ingredients.canMake(drink));
             count++;
         }
