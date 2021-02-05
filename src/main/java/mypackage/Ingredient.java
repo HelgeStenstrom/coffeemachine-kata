@@ -3,14 +3,18 @@ package mypackage;
 import java.util.Objects;
 
 public class Ingredient implements Comparable<Ingredient> {
+
     private final double cost;
-
     private final Material material;
-
     private int stock;
+
     public Ingredient(Material material, double cost) {
         this.material = material;
         this.cost = cost;
+        this.stock = 10;
+    }
+
+    void restock() {
         this.stock = 10;
     }
 
@@ -31,33 +35,28 @@ public class Ingredient implements Comparable<Ingredient> {
         return Objects.hash(material);
     }
 
-    public int compareTo(Ingredient ingredient) {
-        return material.getIngredientName().compareTo(ingredient.getName());
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
-    public String getName() {
+    public String name() {
         return material.getIngredientName();
     }
 
-    public int getStock() {
+    public int stock() {
         return stock;
     }
 
-    void consume(Integer neededAmount) {
+    void consume(int neededAmount) {
         this.stock = stock - neededAmount;
     }
 
-    public boolean available(Integer amount) {
+    public boolean available(int amount) {
         return stock >= amount;
     }
 
     double cost(Drink drink) {
-        Integer integer = drink.neededAmount(this);
-        return cost * integer;
+        return cost * drink.neededAmount(this);
     }
 
+
+    public int compareTo(Ingredient ingredient) {
+        return material.getIngredientName().compareTo(ingredient.name());
+    }
 }

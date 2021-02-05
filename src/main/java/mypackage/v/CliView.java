@@ -11,7 +11,7 @@ public class CliView {
     public void askForSelection(List<Drink> drinkList, Ingredients ingredients) {
         System.out.println("Inventory:");
         for (Ingredient ingredient : ingredients) {
-            System.out.println(ingredient.getName() + "," + ingredient.getStock());
+            System.out.println(ingredient.name() + "," + ingredient.stock());
         }
 
         System.out.println("\nMenu:");
@@ -20,7 +20,7 @@ public class CliView {
             double cost = ingredients.cost(drink);
             System.out.printf("%d,%s,$%.2f,%s%n",
                     count,
-                    drink.getName(),
+                    drink.name,
                     cost,
                     ingredients.canMake(drink));
             count++;
@@ -30,11 +30,11 @@ public class CliView {
     }
 
     public void showOutOfStock(Drink drink) {
-        System.out.println("Out of stock: " + drink.getName() + "\n");
+        System.out.println("Out of stock: " + drink.name + "\n");
     }
 
     public void showDispensingDrink(Drink drink) {
-        System.out.println("Dispensing: " + drink.getName() + "\n");
+        System.out.println("Dispensing: " + drink.name + "\n");
     }
 
     public void showInvalidSelection(String input) {

@@ -24,7 +24,7 @@ public class Ingredients implements Iterable<Ingredient> {
     }
 
     public void restock() {
-        ingredientList.forEach(ingredient -> ingredient.setStock(10));
+        ingredientList.forEach(ingredient -> ingredient.restock());
 
     }
 
@@ -45,11 +45,11 @@ public class Ingredients implements Iterable<Ingredient> {
             return;
         }
         onSuccess.run();
-        make(drink);
+        _make(drink);
 
     }
 
-    private void make(Drink drink) {
+    private void _make(Drink drink) {
         for (Ingredient ingredient : this) {
             ingredient.consume(drink.neededAmount(ingredient));
         }

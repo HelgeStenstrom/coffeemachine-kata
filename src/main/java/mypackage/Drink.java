@@ -1,30 +1,28 @@
 package mypackage;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.summingInt;
 
 public class Drink implements Comparable<Drink> {
     private final Map<Material, Integer> recipe;//map ingredients to units per
-    private final String name;
+    public final String name;
 
     public Drink(String name, Material[] recipe) {
         this.name = name;
         this.recipe = asMap(recipe);
     }
 
-    public String getName() {
-        return name;
-    }
-
     private Map<Material, Integer> asMap(Material[] recipe) {
 
-        return Arrays.stream(recipe)
-                .collect(Collectors.groupingBy(
-                        Function.identity(),
-                        Collectors.summingInt(e -> 1)));
+        return stream(recipe)
+                .collect(groupingBy(
+                        identity(),
+                        summingInt(e -> 1)));
     }
 
     @Override
@@ -46,7 +44,7 @@ public class Drink implements Comparable<Drink> {
     }
 
     public int compareTo(Drink drink) {
-        return name.compareTo(drink.getName());
+        return name.compareTo(drink.name);
     }
 
 }
