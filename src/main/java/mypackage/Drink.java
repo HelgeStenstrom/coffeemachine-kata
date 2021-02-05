@@ -1,48 +1,40 @@
 package mypackage;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Drink implements Comparable<Drink> {
-    private final Map<String, Integer> recipe = new HashMap<>();//map ingredients to units per
+    private final Map<String, Integer> recipe;//map ingredients to units per
     private final String name;
 
-    public Drink(String name, Ingredient.Ingred[] recipe) {
+    public Drink(String name, Material[] recipe) {
         this.name = name;
-        setRecipe(recipe);
-    }
-
-    public void setRecipe(Ingredient.Ingred[] recipe) {
-        for (Ingredient.Ingred ingredient : recipe) {
-            String ingredientName = ingredient.getIngredientName();
-            if (this.recipe.containsKey(ingredientName)) {
-                this.recipe.put(ingredientName, this.recipe.get(ingredientName) + 1);//increment if multiple units
-            } else {
-                this.recipe.put(ingredientName, 1);//insert first occurrence of ingredient
-            }
-        }
+        this.recipe = asMap(recipe);
     }
 
     public String getName() {
         return name;
     }
 
-    void make(Ingredients ingredients, CliView view) {
-        if (isMakeable(ingredients)) {
-            view.showDispensingDrink(this);
-            for (Ingredient ingredient : ingredients.ingredientList) {
-                consume(ingredient);
+    private Map<String, Integer> asMap(Material[] recipe) {
+        // Time: 14:38
+        Map<Material, Long> collect = Arrays.stream(recipe).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+
+        Map<String, Integer> recipeMap = new HashMap<>();
+        for (Material ingredient : recipe) {
+            String ingredientName = ingredient.getIngredientName();
+            if (recipeMap.containsKey(ingredientName)) {
+                recipeMap.put(ingredientName, recipeMap.get(ingredientName) + 1);//increment if multiple units
+            } else {
+                recipeMap.put(ingredientName, 1);//insert first occurrence of ingredient
             }
-        } else {
-            view.showOutOfStock(this);
         }
-
-    }
-
-    public int compareTo(Drink drink) {
-        return name.compareTo(drink.getName());
+        return recipeMap;
     }
 
     @Override
@@ -58,28 +50,13 @@ public class Drink implements Comparable<Drink> {
         return Objects.equals(name, drink.name);
     }
 
-    private void consume(Ingredient ingredient) {
-        if (needed(ingredient, recipe)) {
-            ingredient.consume(recipe.get(ingredient.getName()));
-        }
+    public Integer neededAmount(Ingredient ingredient) {
+        return recipe.getOrDefault(ingredient.getName(), 0);
+
     }
 
-    public boolean isMakeable(Ingredients ingredients) {
-        return ingredients.makeable(recipe, this);
+    public int compareTo(Drink drink) {
+        return name.compareTo(drink.getName());
     }
 
-    public boolean needed(Ingredient ingredient, Map<String, Integer> recipe) {
-        return recipe.containsKey(ingredient.getName());
-    }
-
-    public boolean available(Ingredient ingredient, Map<String, Integer> recipe) {
-        return ingredient.hasAmount(recipe.get(ingredient.getName()));
-    }
-
-    double cost(List<Ingredient> ingredientList) {
-        return ingredientList.stream()
-                .filter(ingredient -> needed(ingredient, recipe))
-                .mapToDouble(ingredient -> ingredient.getCost() * recipe.get(ingredient.getName()))
-                .sum();
-    }
 }

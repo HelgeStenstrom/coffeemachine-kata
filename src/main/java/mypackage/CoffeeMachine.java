@@ -1,14 +1,16 @@
 package mypackage;
 
+import mypackage.v.CliView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static mypackage.Ingredient.Ingred.*;
+import static mypackage.Material.*;
 
 public class CoffeeMachine {
     public final Ingredients ingredients;
-    final List<Drink> drinkList = new ArrayList<>();
+    public final List<Drink> drinkList = new ArrayList<>();
 
     public CoffeeMachine() {
         ingredients = new Ingredients();
@@ -16,23 +18,26 @@ public class CoffeeMachine {
     }
 
     public void addAllDrinks() {
-        addDrink("Coffee", new Ingredient.Ingred[]{COFFEE, COFFEE, COFFEE, SUGAR, CREAM});
-        addDrink("Decaf Coffee", new Ingredient.Ingred[]{DECAF_COFFEE, DECAF_COFFEE, DECAF_COFFEE, SUGAR, CREAM});
-        addDrink("Caffe Latte", new Ingredient.Ingred[]{ESPRESSO, ESPRESSO, STEAMED_MILK});
-        addDrink("Caffe Americano", new Ingredient.Ingred[]{ESPRESSO, ESPRESSO, ESPRESSO});
-        addDrink("Caffe Mocha", new Ingredient.Ingred[]{ESPRESSO, COCOA, STEAMED_MILK, WHIPPED_CREAM});
-        addDrink("Cappuccino", new Ingredient.Ingred[]{ESPRESSO, ESPRESSO, STEAMED_MILK, FOAMED_MILK});
+        addDrink("Coffee", new Material[]{COFFEE, COFFEE, COFFEE, SUGAR, CREAM});
+        addDrink("Decaf Coffee", new Material[]{DECAF_COFFEE, DECAF_COFFEE, DECAF_COFFEE, SUGAR, CREAM});
+        addDrink("Caffe Latte", new Material[]{ESPRESSO, ESPRESSO, STEAMED_MILK});
+        addDrink("Caffe Americano", new Material[]{ESPRESSO, ESPRESSO, ESPRESSO});
+        addDrink("Caffe Mocha", new Material[]{ESPRESSO, COCOA, STEAMED_MILK, WHIPPED_CREAM});
+        addDrink("Cappuccino", new Material[]{ESPRESSO, ESPRESSO, STEAMED_MILK, FOAMED_MILK});
 
         Collections.sort(drinkList);
     }
 
-    public void addDrink(String name, Ingredient.Ingred[] recipe) {
+    public void addDrink(String name, Material[] recipe) {
         Drink drink = new Drink(name, recipe);
         drinkList.add(drink);
     }
 
     public void makeDrink(int drinkId, CliView view) {
-        drinkById(drinkId).make(ingredients, view);
+        ingredients.make(
+                drinkById(drinkId),
+                () -> view.showDispensingDrink(drinkById(drinkId)),
+                () -> view.showOutOfStock(drinkById(drinkId)));
     }
 
     private Drink drinkById(int drinkId) {

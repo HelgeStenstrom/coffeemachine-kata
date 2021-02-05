@@ -1,4 +1,7 @@
-package mypackage;
+package mypackage.m;
+
+import mypackage.CoffeeMachine;
+import mypackage.v.CliView;
 
 import java.io.BufferedReader;
 import java.io.IOException;

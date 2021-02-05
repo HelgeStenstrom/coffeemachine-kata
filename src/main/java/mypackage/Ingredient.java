@@ -7,7 +7,7 @@ public class Ingredient implements Comparable<Ingredient> {
     private final double cost;
     private int stock;
 
-    public Ingredient(Ingred name, double cost) {
+    public Ingredient(Material name, double cost) {
         this.name = name.getIngredientName();
         this.cost = cost;
         this.stock = 10;
@@ -38,10 +38,6 @@ public class Ingredient implements Comparable<Ingredient> {
         return name;
     }
 
-    public double getCost() {
-        return cost;
-    }
-
     public int getStock() {
         return stock;
     }
@@ -50,29 +46,12 @@ public class Ingredient implements Comparable<Ingredient> {
         this.stock = stock - neededAmount;
     }
 
-    boolean hasAmount(Integer neededAmount) {
-        return stock >= neededAmount;
+    public boolean available(Integer amount) {
+        return stock >= amount;
     }
 
-    public enum Ingred {
-        COFFEE("Coffee"),
-        SUGAR("Sugar"),
-        CREAM("Cream"),
-        DECAF_COFFEE("Decaf Coffee"),
-        ESPRESSO("Espresso"),
-        STEAMED_MILK("Steamed Milk"),
-        COCOA("Cocoa"),
-        WHIPPED_CREAM("Whipped Cream"),
-        FOAMED_MILK("Foamed Milk");
-
-        public String getIngredientName() {
-            return ingredientName;
-        }
-
-        private final String ingredientName;
-
-        Ingred(String ingredientName) {
-            this.ingredientName = ingredientName;
-        }
+    double cost(Drink drink) {
+        return cost * drink.neededAmount(this);
     }
+
 }

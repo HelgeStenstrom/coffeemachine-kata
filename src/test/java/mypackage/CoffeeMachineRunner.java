@@ -1,5 +1,7 @@
 package mypackage;
 
+import mypackage.m.CoffeeMachineApp;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
