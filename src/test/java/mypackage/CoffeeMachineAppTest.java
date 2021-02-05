@@ -9,7 +9,7 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class CoffeeMachineTest {
+class CoffeeMachineAppTest {
 
     private PrintStream originalOut;
     private InputStream originalIn;

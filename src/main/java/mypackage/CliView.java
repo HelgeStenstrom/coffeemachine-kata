@@ -4,16 +4,20 @@ import java.util.List;
 
 public class CliView {
 
-    public void askForSelection(List<Ingredient> ingredientList, List<Drink> drinkList) {
+    public void askForSelection(List<Drink> drinkList, Ingredients ingredients) {
         System.out.println("Inventory:");
-        for (Ingredient i : ingredientList) {
+        for (Ingredient i : ingredients.ingredientList) {
             System.out.println(i.getName() + "," + i.getStock());
         }
 
         System.out.println("\nMenu:");
         int count = 1;
-        for (Drink d : drinkList) {
-            System.out.printf("%d,%s,$%.2f,%s%n", count, d.getName(), d.cost(ingredientList), d.isMakeable(ingredientList));
+        for (Drink drink : drinkList) {
+            System.out.printf("%d,%s,$%.2f,%s%n",
+                    count,
+                    drink.getName(),
+                    drink.cost(ingredients.ingredientList),
+                    drink.isMakeable(ingredients));
             count++;
         }
 

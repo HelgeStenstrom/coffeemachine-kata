@@ -16,7 +16,7 @@ public class CoffeeMachineRunner {
         System.setOut(new PrintStream(output));
 
 
-        CoffeeMachine.main(new String[]{});
+        CoffeeMachineApp.main(new String[]{});
         return output.toString();
     }
 }

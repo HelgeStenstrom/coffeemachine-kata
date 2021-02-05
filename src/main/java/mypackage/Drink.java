@@ -14,8 +14,40 @@ public class Drink implements Comparable<Drink> {
         setRecipe(recipe);
     }
 
+    public void setRecipe(Ingredient.Ingred[] recipe) {
+        for (Ingredient.Ingred ingredient : recipe) {
+            String ingredientName = ingredient.getIngredientName();
+            if (this.recipe.containsKey(ingredientName)) {
+                this.recipe.put(ingredientName, this.recipe.get(ingredientName) + 1);//increment if multiple units
+            } else {
+                this.recipe.put(ingredientName, 1);//insert first occurrence of ingredient
+            }
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    void make(Ingredients ingredients, CliView view) {
+        if (isMakeable(ingredients)) {
+            view.showDispensingDrink(this);
+            for (Ingredient ingredient : ingredients.ingredientList) {
+                consume(ingredient);
+            }
+        } else {
+            view.showOutOfStock(this);
+        }
+
+    }
+
     public int compareTo(Drink drink) {
         return name.compareTo(drink.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     @Override
@@ -26,65 +58,27 @@ public class Drink implements Comparable<Drink> {
         return Objects.equals(name, drink.name);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-
-    public void setRecipe(Ingredient.Ingred[] recipe) {
-        for (Ingredient.Ingred ingr : recipe) {
-            String s = ingr.getIngredientName();
-            if (this.recipe.containsKey(s)) {
-                this.recipe.put(s, this.recipe.get(s) + 1);//increment if multiple units
-            } else {
-                this.recipe.put(s, 1);//insert first occurrence of ingredient
-            }
-        }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    void make(List<Ingredient> ingredientList, CliView view) {
-        if (isMakeable(ingredientList)) {
-            view.showDispensingDrink(this);
-            for (Ingredient ingredient : ingredientList) {
-                consume(ingredient);
-            }
-        } else {
-            view.showOutOfStock(this);
-        }
-
-    }
-
     private void consume(Ingredient ingredient) {
-        if (isNeeded(ingredient)) {
-            ingredient.consume(neededAmount(ingredient));
+        if (needed(ingredient, recipe)) {
+            ingredient.consume(recipe.get(ingredient.getName()));
         }
     }
 
-    private boolean isNeeded(Ingredient ingredient) {
+    public boolean isMakeable(Ingredients ingredients) {
+        return ingredients.makeable(recipe, this);
+    }
+
+    public boolean needed(Ingredient ingredient, Map<String, Integer> recipe) {
         return recipe.containsKey(ingredient.getName());
     }
 
-    private Integer neededAmount(Ingredient ingredient) {
-        return recipe.get(ingredient.getName());
-    }
-
-    public boolean isMakeable(List<Ingredient> ingredientList) {
-        return ingredientList.stream()
-                .filter(this::isNeeded)
-                .allMatch(this::available);
-    }
-
-    private boolean available(Ingredient ingredient) {
-        return ingredient.hasAmount(neededAmount(ingredient));
+    public boolean available(Ingredient ingredient, Map<String, Integer> recipe) {
+        return ingredient.hasAmount(recipe.get(ingredient.getName()));
     }
 
     double cost(List<Ingredient> ingredientList) {
         return ingredientList.stream()
-                .filter(ingredient -> recipe.containsKey(ingredient.getName()))
+                .filter(ingredient -> needed(ingredient, recipe))
                 .mapToDouble(ingredient -> ingredient.getCost() * recipe.get(ingredient.getName()))
                 .sum();
     }
