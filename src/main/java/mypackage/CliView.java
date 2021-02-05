@@ -13,7 +13,7 @@ public class CliView {
         System.out.println("\nMenu:");
         int count = 1;
         for (Drink d : drinkList) {
-            System.out.printf("%d,%s,$%.2f,%s%n", count, d.getName(), d.getCost(), d.isMakeable(ingredientList));
+            System.out.printf("%d,%s,$%.2f,%s%n", count, d.getName(), d.cost(ingredientList), d.isMakeable(ingredientList));
             count++;
         }
 

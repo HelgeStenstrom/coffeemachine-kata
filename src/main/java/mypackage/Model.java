@@ -3,7 +3,6 @@ package mypackage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static mypackage.Ingredient.Ingred.*;
 
@@ -14,7 +13,6 @@ public class Model {
     public Model() {
         addAllIngredients();
         addAllDrinks();
-        updateCosts();
     }
 
     public void addAllDrinks() {
@@ -49,19 +47,6 @@ public class Model {
 
     public void addIngredient(Ingredient ingredient) {
         ingredientList.add(ingredient);
-    }
-
-    public void updateCosts() {
-        for (Drink d : drinkList) {
-            double currCost = 0;
-            Map<String, Integer> currRecipe = d.getRecipe();
-            for (Ingredient i : ingredientList) {
-                if (currRecipe.containsKey(i.getName())) {
-                    currCost += i.getCost() * currRecipe.get(i.getName());
-                }
-            }
-            d.setCost(currCost);
-        }
     }
 
     public void makeDrink(int drinkId, CliView view) {

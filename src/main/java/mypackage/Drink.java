@@ -8,7 +8,6 @@ import java.util.Objects;
 public class Drink implements Comparable<Drink> {
     private final Map<String, Integer> recipe = new HashMap<>();//map ingredients to units per
     private final String name;
-    private double totalCost = 0;
 
     public Drink(String name, Ingredient.Ingred[] recipe) {
         this.name = name;
@@ -41,18 +40,6 @@ public class Drink implements Comparable<Drink> {
                 this.recipe.put(s, 1);//insert first occurrence of ingredient
             }
         }
-    }
-
-    public void setCost(double totalCost) {
-        this.totalCost = totalCost;
-    }
-
-    public Map<String, Integer> getRecipe() {
-        return recipe;
-    }
-
-    public double getCost() {
-        return totalCost;
     }
 
     public String getName() {
@@ -95,4 +82,10 @@ public class Drink implements Comparable<Drink> {
         return ingredient.hasAmount(neededAmount(ingredient));
     }
 
+    double cost(List<Ingredient> ingredientList) {
+        return ingredientList.stream()
+                .filter(ingredient -> recipe.containsKey(ingredient.getName()))
+                .mapToDouble(ingredient -> ingredient.getCost() * recipe.get(ingredient.getName()))
+                .sum();
+    }
 }
