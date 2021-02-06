@@ -3,7 +3,6 @@ package mypackage.cm;
 import mypackage.Ingredient;
 import mypackage.Stocks;
 import mypackage.dr.Drink;
-import mypackage.v.CliView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,11 +27,11 @@ public class CoffeeMachine {
         return stocks.cost(drink);
     }
 
-    public void makeDrink(int drinkId, CliView view) {
+    public void makeDrink(Drink drink, Runnable onSuccess, Runnable onError) {
         stocks.make(
-                drinkById(drinkId),
-                () -> view.showDispensingDrink(drinkById(drinkId)),
-                () -> view.showOutOfStock(drinkById(drinkId)));
+                drink,
+                onSuccess,
+                onError);
     }
 
     public Drink drinkById(int drinkId) {
@@ -56,8 +55,7 @@ public class CoffeeMachine {
         Collections.sort(menu);
     }
 
-    public void restockIngredients() {
-
+    public void restock() {
         stocks.restock();
     }
 
