@@ -1,12 +1,11 @@
 package mypackage.m;
 
+import mypackage.Input;
 import mypackage.cm.CoffeeMachine;
 import mypackage.dr.Drink;
 import mypackage.v.CliView;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class CoffeeMachineApp {
 
@@ -27,33 +26,37 @@ public class CoffeeMachineApp {
 
     public static void control(CoffeeMachine coffeeMachine, CliView view) {
         view.askForSelection(coffeeMachine);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String input = "";
+        Input input = new Input();
+        String commmand = "";
 
+        do {
+            try {
+                commmand = input.get();
 
-        do try {
-            input = reader.readLine().toLowerCase();
-
-            switch (input) {
-                case "":
-                case QUIT:
-                    continue;
-                case RESTOCK:
-                    coffeeMachine.restock();
-                    break;
-                default:
-                    makeDrink(coffeeMachine, view, Integer.parseInt(input));
-                    break;
+                switch (commmand) {
+                    case "":
+                    case QUIT:
+                        continue;
+                    case RESTOCK:
+                        coffeeMachine.restock();
+                        view.askForSelection(coffeeMachine);
+                        break;
+                    default:
+                        try {
+                            makeDrink(coffeeMachine, view, Integer.parseInt(commmand));
+                            view.askForSelection(coffeeMachine);
+                        } catch (NumberFormatException e) {
+                            view.showInvalidSelection(commmand); //illegal commmand
+                        }
+                        break;
+                }
+            } catch (IOException | IllegalArgumentException e) {
             }
-            view.askForSelection(coffeeMachine);
-        } catch (IOException | IllegalArgumentException e) {
-            view.showInvalidSelection(input); //illegal input
-        }
-        while (!input.equals(QUIT));
+        } while (!commmand.equals(QUIT));
     }
 
     private static void makeDrink(CoffeeMachine coffeeMachine, CliView view, int drinkId) {
-        Drink drink = coffeeMachine.drinkById(drinkId);
+        Drink drink = coffeeMachine.drinkById(drinkId).orElseThrow(IllegalArgumentException::new);
         coffeeMachine.makeDrink(
                 drink,
                 () -> view.showDispensingDrink(drink),

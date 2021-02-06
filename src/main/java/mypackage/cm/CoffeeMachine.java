@@ -7,6 +7,7 @@ import mypackage.dr.Drink;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static mypackage.Ingredient.*;
 
@@ -34,9 +35,16 @@ public class CoffeeMachine {
                 onError);
     }
 
-    public Drink drinkById(int drinkId) {
-        assertDrinkExists(drinkId);
-        return menu.get(drinkId - 1);
+    public void restock() {
+        stocks.restock();
+    }
+
+    public Optional<Drink> drinkById(int drinkId) {
+        if (drinkExists(drinkId)) {
+            return Optional.of(menu.get(drinkId - 1));
+        }
+        else
+            return Optional.empty();
     }
 
     public void addDrink(String name, Ingredient[] recipe) {
@@ -55,13 +63,7 @@ public class CoffeeMachine {
         Collections.sort(menu);
     }
 
-    public void restock() {
-        stocks.restock();
-    }
-
-    private void assertDrinkExists(int drinkId) {
-        if (drinkId <= 0 || drinkId > menu.size()) {
-            throw new IllegalArgumentException();
-        }
+    private boolean drinkExists(int drinkId) {
+        return drinkId > 0 && drinkId <= menu.size();
     }
 }

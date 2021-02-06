@@ -93,6 +93,15 @@ class CoffeeMachineAppTest {
     }
 
     @Test
+    void illegalChoiceAndQuit() {
+
+        var output = CoffeeMachineRunner.runCoffeeMachine("X\nq\n");
+
+        assertEquals(getOriginalInventory() + originalMenu() + "Invalid selection: x. Try again: ", output);
+
+    }
+
+    @Test
     void refillAndQuit() {
 
         var output = CoffeeMachineRunner.runCoffeeMachine("r\nq\n");
