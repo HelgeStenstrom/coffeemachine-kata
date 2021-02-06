@@ -1,8 +1,4 @@
-package mypackage.cm;
-
-import mypackage.Ingredient;
-import mypackage.Stocks;
-import mypackage.dr.Drink;
+package mypackage;
 
 import java.util.ArrayList;
 import java.util.Collections;

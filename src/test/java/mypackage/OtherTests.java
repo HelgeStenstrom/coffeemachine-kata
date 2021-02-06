@@ -1,7 +1,5 @@
 package mypackage;
 
-import mypackage.cm.CoffeeMachine;
-import mypackage.dr.Drink;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;

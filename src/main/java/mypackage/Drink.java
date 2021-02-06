@@ -1,6 +1,4 @@
-package mypackage.dr;
-
-import mypackage.Ingredient;
+package mypackage;
 
 import java.util.Map;
 import java.util.Objects;
@@ -21,7 +19,6 @@ public class Drink implements Comparable<Drink> {
 
     public Integer neededAmount(Ingredient ingredient) {
         return recipe.getOrDefault(ingredient, 0);
-
     }
 
     private Map<Ingredient, Integer> asMap(Ingredient[] recipe) {

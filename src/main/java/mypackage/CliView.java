@@ -1,15 +1,11 @@
-package mypackage.v;
-
-import mypackage.Stock;
-import mypackage.cm.CoffeeMachine;
-import mypackage.dr.Drink;
+package mypackage;
 
 public class CliView {
 
     public void askForSelection(CoffeeMachine coffeeMachine) {
         System.out.println("Inventory:");
         for (Stock stock : coffeeMachine.stocks) {
-            System.out.println(stock.name() + "," + stock.amount());
+            System.out.println(stock.toString() + "," + stock.amount());
         }
 
         System.out.println("\nMenu:");

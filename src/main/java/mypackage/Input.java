@@ -12,8 +12,12 @@ public class Input {
         bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    public String get() throws IOException {
-        return bufferedReader.readLine().toLowerCase();
+    public String get() {
+        try {
+            return bufferedReader.readLine().toLowerCase();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

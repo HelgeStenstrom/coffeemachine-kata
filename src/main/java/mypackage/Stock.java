@@ -1,7 +1,5 @@
 package mypackage;
 
-import mypackage.dr.Drink;
-
 import java.util.Objects;
 
 public class Stock implements Comparable<Stock> {
@@ -36,6 +34,10 @@ public class Stock implements Comparable<Stock> {
         return cost * drink.neededAmount(ingredient);
     }
 
+    public int compareTo(Stock stock) {
+        return ingredient.getIngredientName().compareTo(stock.toString());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,12 +51,9 @@ public class Stock implements Comparable<Stock> {
         return Objects.hash(ingredient);
     }
 
-    public String name() {
+    @Override
+    public String toString() {
         return ingredient.getIngredientName();
     }
 
-
-    public int compareTo(Stock stock) {
-        return ingredient.getIngredientName().compareTo(stock.name());
-    }
 }
