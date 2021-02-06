@@ -22,23 +22,17 @@ public class CoffeeMachineApp {
         Input input = new Input();
 
         while (true) {
-            String commmand = input.get();
-            if (commmand.equals(QUIT)) break;
-            handleCommand(commmand, coffeeMachine, view);
+            String command = input.get();
+            if (command.equals(QUIT)) break;
+            handleCommand(command, coffeeMachine, view);
         }
     }
 
     private static void handleCommand(String command, CoffeeMachine coffeeMachine, CliView view) {
-        switch (command) {
-            case "":
-            case QUIT:
-                break;
-            case RESTOCK:
-                restock(coffeeMachine, view);
-                break;
-            default:
-                makeDrink(command, coffeeMachine, view);
-                break;
+        if (RESTOCK.equals(command)) {
+            restock(coffeeMachine, view);
+        } else {
+            makeDrink(command, coffeeMachine, view);
         }
     }
 
@@ -47,9 +41,9 @@ public class CoffeeMachineApp {
         view.askForSelection(coffeeMachine);
     }
 
-    private static void makeDrink(String commmand, CoffeeMachine coffeeMachine, CliView view) {
+    private static void makeDrink(String command, CoffeeMachine coffeeMachine, CliView view) {
         try {
-            Drink drink = coffeeMachine.drinkById(Integer.parseInt(commmand)).orElseThrow(IllegalArgumentException::new);
+            Drink drink = coffeeMachine.drinkById(Integer.parseInt(command)).orElseThrow(IllegalArgumentException::new);
             coffeeMachine.makeDrink(
                     drink,
                     () -> view.showDispensingDrink(drink),
@@ -57,7 +51,7 @@ public class CoffeeMachineApp {
             );
             view.askForSelection(coffeeMachine);
         } catch (NumberFormatException e) {
-            view.showInvalidSelection(commmand); //illegal commmand
+            view.showInvalidSelection(command); //illegal command
         }
     }
 

@@ -1,6 +1,9 @@
 package mypackage;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -69,11 +72,5 @@ public class Stocks implements Iterable<Stock> {
     @Override
     public void forEach(Consumer<? super Stock> action) {
         stockList.forEach(action);
-    }
-
-
-    @Override
-    public Spliterator<Stock> spliterator() {
-        return stockList.spliterator();
     }
 }

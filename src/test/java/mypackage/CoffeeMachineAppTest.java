@@ -78,6 +78,7 @@ class CoffeeMachineAppTest {
                 "\n";
     }
 
+    @SuppressWarnings("SameReturnValue")
     private String dispensingAmericano() {
         return "Dispensing: Caffe Americano\n\n";
     }
