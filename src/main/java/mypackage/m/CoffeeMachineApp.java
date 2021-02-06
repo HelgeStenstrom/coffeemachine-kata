@@ -1,6 +1,6 @@
 package mypackage.m;
 
-import mypackage.CoffeeMachine;
+import mypackage.cm.CoffeeMachine;
 import mypackage.v.CliView;
 
 import java.io.BufferedReader;
@@ -25,7 +25,7 @@ public class CoffeeMachineApp {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String input = "";
 
-        view.askForSelection(coffeeMachine.drinkList, coffeeMachine.ingredients);
+        view.askForSelection(coffeeMachine);
 
         while (true) try {
             input = reader.readLine().toLowerCase();
@@ -37,7 +37,7 @@ public class CoffeeMachineApp {
             } else {
                 coffeeMachine.makeDrink(Integer.parseInt(input), view);
             }
-            view.askForSelection(coffeeMachine.drinkList, coffeeMachine.ingredients);
+            view.askForSelection(coffeeMachine);
         } catch (IOException | IllegalArgumentException e) {
             view.showInvalidSelection(input); //illegal input
         }

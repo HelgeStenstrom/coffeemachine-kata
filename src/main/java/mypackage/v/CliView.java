@@ -1,40 +1,41 @@
 package mypackage.v;
 
-import mypackage.Drink;
-import mypackage.Ingredient;
-import mypackage.Ingredients;
-
-import java.util.List;
+import mypackage.Stock;
+import mypackage.cm.CoffeeMachine;
+import mypackage.dr.Drink;
 
 public class CliView {
 
-    public void askForSelection(List<Drink> drinkList, Ingredients ingredients) {
+    public void askForSelection(CoffeeMachine coffeeMachine) {
         System.out.println("Inventory:");
-        for (Ingredient ingredient : ingredients) {
-            System.out.println(ingredient.name() + "," + ingredient.stock());
+        for (Stock stock : coffeeMachine.stocks) {
+            System.out.println(stock.name() + "," + stock.amount());
         }
 
         System.out.println("\nMenu:");
         int count = 1;
-        for (Drink drink : drinkList) {
-            double cost = ingredients.cost(drink);
-            System.out.printf("%d,%s,$%.2f,%s%n",
-                    count,
-                    drink.name,
-                    cost,
-                    ingredients.canMake(drink));
+        for (Drink drink : coffeeMachine.menu) {
+            printDrink(coffeeMachine, count, drink);
             count++;
         }
 
         System.out.print("\nYour selection: ");
     }
 
+    private void printDrink(CoffeeMachine coffeeMachine, int count, Drink drink) {
+        System.out.printf("%d,%s,$%.2f,%s%n",
+                count,
+                drink.getName(),
+                coffeeMachine.cost(drink),
+                coffeeMachine.canMake(drink));
+    }
+
     public void showOutOfStock(Drink drink) {
-        System.out.println("Out of stock: " + drink.name + "\n");
+        System.out.println("Out of stock: " + drink.getName() + "\n");
     }
 
     public void showDispensingDrink(Drink drink) {
-        System.out.println("Dispensing: " + drink.name + "\n");
+        System.out.println("Dispensing: " + drink.getName() + "\n");
     }
 
     public void showInvalidSelection(String input) {

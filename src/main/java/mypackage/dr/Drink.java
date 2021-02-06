@@ -1,4 +1,6 @@
-package mypackage;
+package mypackage.dr;
+
+import mypackage.Ingredient;
 
 import java.util.Map;
 import java.util.Objects;
@@ -9,15 +11,20 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.summingInt;
 
 public class Drink implements Comparable<Drink> {
-    private final Map<Material, Integer> recipe;//map ingredients to units per
-    public final String name;
+    private final Map<Ingredient, Integer> recipe;//map ingredients to units per
+    private final String name;
 
-    public Drink(String name, Material[] recipe) {
+    public Drink(String name, Ingredient[] recipe) {
         this.name = name;
         this.recipe = asMap(recipe);
     }
 
-    private Map<Material, Integer> asMap(Material[] recipe) {
+    public Integer neededAmount(Ingredient ingredient) {
+        return recipe.getOrDefault(ingredient, 0);
+
+    }
+
+    private Map<Ingredient, Integer> asMap(Ingredient[] recipe) {
 
         return stream(recipe)
                 .collect(groupingBy(
@@ -38,13 +45,11 @@ public class Drink implements Comparable<Drink> {
         return Objects.equals(name, drink.name);
     }
 
-    public Integer neededAmount(Ingredient ingredient) {
-        return recipe.getOrDefault(ingredient.getMaterial(), 0);
-
-    }
-
     public int compareTo(Drink drink) {
         return name.compareTo(drink.name);
     }
 
+    public String getName() {
+        return name;
+    }
 }
